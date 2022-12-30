@@ -1,0 +1,178 @@
+<header class="topbar" data-navbarbg="skin6">
+    <nav class="navbar top-navbar navbar-expand-md">
+        <div class="navbar-header" data-logobg="skin6">
+            <!-- This is for the sidebar toggle which is visible on mobile only -->
+            <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
+                    class="ti-menu ti-close"></i></a>
+            <!-- ============================================================== -->
+            <!-- Logo -->
+            <!-- ============================================================== -->
+            <div class="navbar-brand">
+                <!-- Logo icon -->
+                <a href="index.html">
+                    
+                    <h3 style="font-weight: 700;">FExchange</h3>
+                    
+                </a>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Logo -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Toggle which is visible on mobile only -->
+            <!-- ============================================================== -->
+            <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i
+                    class="ti-more"></i></a>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse collapse" id="navbarSupportedContent">
+            <!-- ============================================================== -->
+            <!-- toggle and nav items -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
+            
+              
+            </ul>
+            <!-- ============================================================== -->
+            <!-- Right side toggle and nav items -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav float-right">
+                <button type="button" class="btn waves-effect waves-light btn-primary" data-toggle="modal" data-target="#order-modal">Place Order</button>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+
+<div id="order-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center mt-2 mb-4">
+                    
+                </div>
+
+                <form action="{% url 'placeorder' %}" class="pl-3 pr-3" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label><b>Security Type:</b></label>
+                        <div class="form-check">
+                            <select class="custom-select" name="security_type">
+                                <option selected>Choose a security type...</option>
+                                <option value="Security 1">Security 1</option>
+                                <option value="Security 2">Security 2</option>
+                                <option value="Security 3">Security 3</option>
+                                <option value="Security 4">Security 4</option>
+                              </select> 
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Order Type:</b></label><br>
+                        <div class="form-check form-check-inline">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="customControlValidation1" name="order_type" value="Buy">
+                                <label class="custom-control-label" for="customControlValidation1">Buy</label>
+                            </div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="customControlValidation2"name="order_type" value="Sell">
+                                <label class="custom-control-label" for="customControlValidation2">Sell</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="price"><b>Price:</b></label>
+                        <input class="form-control" type="number" name="price" min="0" id="price" required="" placeholder="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity"><b>Quantity:</b></label>
+                        <input class="form-control" type="number" min="0" name="quantity" id="quantity" required="" placeholder="">
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button class="btn btn-rounded btn-primary" type="submit">PLACE ORDER</button>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ============================================================== -->
+<!-- End Topbar header -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
+<aside class="left-sidebar" data-sidebarbg="skin6">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar" data-sidebarbg="skin6">
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+            <ul id="sidebarnav">
+                
+                <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="{% url 'home' %}"
+                        aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
+                            class="hide-menu">Dashboard</span></a></li>
+        
+               <!-- <li class="nav-small-cap"><span class="hide-menu">Applications</span></li>-->
+
+                <li class="sidebar-item"> <a class="sidebar-link" href="{% url 'createdorders' %}"
+                        aria-expanded="false"><i data-feather="tag" class="feather-icon"></i><span
+                            class="hide-menu">Orders
+                        </span></a>
+                </li>
+                <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="{% url 'viewportfolio' %}"
+                        aria-expanded="false"><i data-feather="message-square" class="feather-icon"></i><span
+                            class="hide-menu">Portfolio</span></a></li>
+              
+
+              <li class="list-divider"></li>
+               
+                <form method="POST" action="{% url 'logoutuser' %}">{% csrf_token %}
+                <li class="sidebar-item"> <button style="border: none; background-color: white;" type="submit"><a class="sidebar-link sidebar-link" href="#"
+                        aria-expanded="false"><i data-feather="log-out" class="feather-icon"></i><span
+                            class="hide-menu">Logout</span></a></button></li></form>
+            </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>

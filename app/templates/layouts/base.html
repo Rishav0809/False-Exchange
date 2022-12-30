@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link href="{% static 'assets1/img/brand/favicon.png' %}" rel="icon" type="image/png">
+    <title>{% block title %}{% endblock title %}</title>
+    <!-- Custom CSS -->
+    <link href="/static/assets/c3.min.css" rel="stylesheet">
+    <link href="/static/assets/chartist.min.css" rel="stylesheet">
+    <link href="/static/assets/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="/static/assets/style.min.css" rel="stylesheet">
+    <link href="/static/assets/dataTables.bootstrap4.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Specific CSS goes HERE -->
+    {% block stylesheets %}{% endblock stylesheets %}
+
+
+</head>
+
+<body>
+  {% block content %}{% endblock content %}
+  {% include "includes/scripts.html" %}
+  {% block javascripts %}{% endblock javascripts %}
+<script>
+        var currentUrl = window.location.pathname.replace(/^\/|\/$/g, '');;
+        $(".sidebar-item").each(function() {
+            var anchor = $(this).find('a');
+            $(this).removeClass('selected');
+            if (anchor.prop('id') == currentUrl) {
+              $(this).addClass("selected");
+            }
+        });
+</script>
+</body>
+
+</html>

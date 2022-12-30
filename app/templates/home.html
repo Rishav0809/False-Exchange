@@ -1,0 +1,223 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} FExchange {% endblock title %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="preloader">
+    <div class="lds-ripple">
+        <div class="lds-pos"></div>
+        <div class="lds-pos"></div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    {% include "includes/sidenav.html" %}
+
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-7 align-self-center">
+                    <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Hey
+                        {{request.user.username}}!</h3>
+                    <div class="d-flex align-items-center">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb m-0 p-0">
+                                <li class="breadcrumb-item"><a href="index.html">Dashboard</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <!-- *************************************************************** -->
+            <!-- Start First Cards -->
+            <!-- *************************************************************** -->
+            <div class="card-group">
+                <div class="card border-right">
+                    <div class="card-body">
+                        <div class="d-flex d-lg-flex d-md-block align-items-center">
+                            <div>
+                                <div class="d-inline-flex align-items-center">
+                                    <h2 class="text-dark mb-1 font-weight-medium">₹{{total_investment}}</h2>
+
+                                </div>
+                                <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Total Investment</h6>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-right">
+                    <div class="card-body">
+                        <div class="d-flex d-lg-flex d-md-block align-items-center">
+                            <div>
+                                <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium">{{executed_orders}}
+                                </h2>
+                                <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Executed Orders
+                                </h6>
+                            </div>
+                            <div class="ml-auto mt-md-3 mt-lg-0">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-right">
+                    <div class="card-body">
+                        <div class="d-flex d-lg-flex d-md-block align-items-center">
+                            <div>
+                                <div class="d-inline-flex align-items-center">
+                                    <h2 class="text-dark mb-1 font-weight-medium">{{pending_orders}}</h2>
+
+                                </div>
+                                <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Pending Orders</h6>
+                            </div>
+                            <div class="ml-auto mt-md-3 mt-lg-0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!---CHOICES TABLE-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+                                <table id="zero_config1" class="table table-bordered no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Created On</th>
+                                            <th>Security Type</th>
+                                            <th>Order Type</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in created_orders %}
+                                        {% ifequal item.status "Executed" %}
+                                        <tr class="table-success">
+                                            {% endifequal %}
+                                            {% ifequal item.status "Pending" %}
+                                        <tr class="table-default">
+                                            {% endifequal %}
+                                            <td>{{ item.created|date:'d-m-Y' }}</td>
+                                            <td>{{ item.security_type }}</td>
+                                            <td>{{ item.order_type }}</td>
+                                            <td>{{ item.price }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>{{ item.status }}</td>
+
+                                            <td>
+                                                {% ifequal item.status "Pending" %}
+                                                <div id="amend-modal1" class="modal fade" tabindex="-1" role="dialog"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <div class="text-center mt-2 mb-4">
+                                                                    <a href="index.html" class="text-success">
+                                                                        <span><img class="mr-2"
+                                                                                src="../assets/images/logo-icon.png"
+                                                                                alt="" height="18"><img
+                                                                                src="../assets/images/logo-text.png"
+                                                                                alt="" height="18"></span>
+                                                                    </a>
+                                                                </div>
+
+                                                                <form method="POST" action="{% url 'amendorder' %}" class="pl-3 pr-3">
+                                                                    {% csrf_token %}
+                                                                    <input type="number" name="order_id" value="{{item.id}}" hidden>
+                                                                    
+                                                                    <div class="form-group">
+                                                                        <label
+                                                                            for="quantity1"><b>Quantity:</b></label>
+                                                                        <input class="form-control" type="number"
+                                                                            min="0" id="quantity1" required=""
+                                                                            placeholder="" name="quantity" value="{{item.quantity}}">
+                                                                    </div>
+
+                                                                    
+
+                                                                    <div class="form-group text-center">
+                                                                        <button class="btn btn-rounded btn-success"
+                                                                            type="submit">AMEND</button>
+                                                                    </div>
+                                                                </form>
+
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div>
+
+                                                <div class="btn-list">
+                                                    <button type="submit"
+                                                        class="btn waves-effect waves-light btn-success"
+                                                        data-toggle="modal" data-target="#amend-modal1">AMEND</button>
+                                                </div>
+                                                {% endifequal %}
+                                            </td>
+                                            <td>
+                                                {% ifequal item.status "Pending" %}
+                                                <form method="POST" action="{% url 'deleteorder' %}">{% csrf_token %}
+                                                    <input type="number" hidden name="order_id" value="{{item.id}}">
+                                                    <button type="submit" class="btn waves-effect waves"
+                                                        style="background-color: red;color: white;">CANCEL</button>
+                                                </form>
+                                                {% endifequal %}
+                                            </td>
+
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+</body>
+
+</html>
+{% endblock content %}
